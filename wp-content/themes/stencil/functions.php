@@ -23,23 +23,10 @@ class STL_Theme	{
 
 
 	public function assets() {
-		wp_deregister_script( 'jquery-core' );
-		wp_register_script( 'jquery-core', "https://code.jquery.com/jquery-3.1.1.min.js", array(), '3.1.1' );
-		wp_deregister_script( 'jquery-migrate' );
-		wp_register_script( 'jquery-migrate', "https://code.jquery.com/jquery-migrate-3.0.0.min.js", array(), '3.0.0' );
-
-		wp_register_script( 'pooper', STL_THEME_ASSET.'js/popper.min.js', array('jquery'), STL_THEME_VER, true);
-		wp_register_script( 'bootstrap', STL_THEME_ASSET.'js/bootstrap.min.js', array('pooper'), STL_THEME_VER, true);
-		wp_register_script( 'stl_swipper', STL_THEME_ASSET.'js/swiper.min.js', array('jquery'), STL_THEME_VER, true);
-		wp_register_script( 'stl_isotope', STL_THEME_ASSET.'js/isotope.pkgd.min.js', array('jquery'), STL_THEME_VER, true);
-		wp_register_script( 'stl_owl', STL_THEME_ASSET.'js/owl.carousel.min.js', array('jquery'), STL_THEME_VER, true);
-		wp_register_script( 'stl_module', STL_THEME_ASSET.'js/module.min.js', array('jquery'), STL_THEME_VER, true);
-		wp_register_script( 'stl_integration', STL_THEME_ASSET.'js/integration.min.js', array('jquery'), STL_THEME_VER, true);
-		wp_register_script( 'stl_core', STL_THEME_ASSET.'js/stencil.min.js', array('bootstrap',  'stl_owl', 'stl_swipper',  'stl_module', 'stl_integration'), STL_THEME_VER, true);
-		wp_register_style( 'fontawesome', STL_THEME_ASSET.'css/font-awesome.min.css');
-		wp_register_style( 'stl_swipper', STL_THEME_ASSET.'css/swiper.min.css');
-		wp_register_style( 'stl_owl', STL_THEME_ASSET.'css/owl.carousel.css');
-		wp_register_style( 'stl_core', STL_THEME_ASSET.'css/stencil.min.css', array('fontawesome', 'stl_owl', 'stl_swipper'),  STL_THEME_VER, false );
+		wp_register_script( 'stencil_vendor', STL_THEME_ASSET.'js/stencil.vendor.js', array('jquery'), STL_THEME_VER, true);
+		wp_register_script( 'stencil', STL_THEME_ASSET.'js/stencil.min.js', array('stencil_vendor'), STL_THEME_VER, true);
+		wp_register_style( 'stencil_vendor', STL_THEME_ASSET.'css/stencil.vendor.css');
+		wp_register_style( 'stencil', STL_THEME_ASSET.'css/stencil.min.css', array('stencil_vendor'),  STL_THEME_VER, false );
 	}
 
 	public function activate() {
@@ -86,5 +73,4 @@ class STL_Theme	{
 		_doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?', 'stencil'), '1.6');
 	}
 }
-
 $STL = STL_Theme::instance();
