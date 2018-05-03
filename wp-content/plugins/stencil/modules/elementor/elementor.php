@@ -3,13 +3,13 @@
 namespace Stencil\Modules\Elementor;
 
 
-final class Elementor {
+final class Elementor extends \Stencil_Loader {
 
     protected $namespace = '\\Stencil\\Modules\\Elementor';
-    protected $widgets = array(
-        'slider',
-        'carousel',
-        'image'
+
+    protected $includes = array(
+        'modules/elementor/widgets/carousel',
+        'modules/elementor/widgets/collection'
     ); 
 
  
@@ -26,15 +26,12 @@ final class Elementor {
                 'icon' => 'fa fa-plug',
             ),
             1);
+         self::$instance->includes();
     }
 
     public function widgets($widgets_manager) {
-        $this->require_file( STL_PATH . "modules/elementor/widget.php" );
-        foreach ( $this->widgets as $content ) {
-           $this->require_file( STL_PATH . "modules/elementor/widgets/$content.php" );
-            $class = str_replace("-", "_",$content);
-            $class = ucwords(str_replace("_", " ",$class));
-            $class = str_replace( " ", "_", $class );
+        foreach ( $this->includes as $include ) {
+            $class = $this->className($include);
             $class = $this->namespace.'\\Widgets\\'.$class;
             if(class_exists( $class, false)) {
                 $widgets_manager->register_widget_type(new $class);
@@ -55,6 +52,7 @@ final class Elementor {
     public static function instance() {
         if ( is_null( self::$instance ) ) {
             self::$instance = new self();
+           
             self::$instance->register();
         }
         return self::$instance;

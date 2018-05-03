@@ -39,15 +39,12 @@ if ( post_password_required() ) {
 					'avatar_size' => 100,
 					'style'       => 'ol',
 					'short_ping'  => true,
-					'reply_text'  => stencil_get_svg( array( 'icon' => 'mail-reply' ) ) . __( 'Reply', 'stencil' ),
+					'reply_text'  => __( 'Reply', 'stencil' ),
 				) );
 			?>
 		</ol>
 
-		<?php the_comments_pagination( array(
-			'prev_text' => stencil_get_svg( array( 'icon' => 'arrow-left' ) ) . '<span class="screen-reader-text">' . __( 'Previous', 'stencil' ) . '</span>',
-			'next_text' => '<span class="screen-reader-text">' . __( 'Next', 'stencil' ) . '</span>' . stencil_get_svg( array( 'icon' => 'arrow-right' ) ),
-		) );
+		<?php 
 
 	endif; // Check for have_comments().
 

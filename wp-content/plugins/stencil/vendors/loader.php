@@ -6,15 +6,17 @@ namespace Stencil\Vendors;
 if (!defined('ABSPATH'))
     exit;
 
-final class Loader {
+final class Loader extends \Stencil_Loader {
 
-    protected $namespace = 'Stencil\\Vendors';
-    protected $apps = array(
-        'html/mustache',
-        'html/html',
-        'html/element',
-        'html/element-html',
-        'html/element-model'
+   
+    protected $includes = array(
+        'vendors/html/mustache',
+        'vendors/html/html',
+        'vendors/html/element',
+        'vendors/html/element-html',
+        'vendors/html/element-model',
+        'vendors/bootstrap/menu',
+        'vendors/template/mustache'
     );
 
     private static $instance;
@@ -23,6 +25,7 @@ final class Loader {
         if ( is_null( self::$instance ) ) {
             self::$instance = new self();
             self::$instance->includes();
+            self::$instance->init();
         }
         return self::$instance;
     }
@@ -34,19 +37,4 @@ final class Loader {
         _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?', 'stencil'), '1.6');
     }
 
-
-
-    protected function includes() {
-        foreach ( $this->apps as $app ) {
-            $this->require_file( STL_PATH . "vendors/$app.php" );
-        }
-    }
-
-    protected function require_file( $file ) {
-        if ( file_exists( $file ) ) {
-            require_once $file;
-            return true;
-        }
-        return false;
-    }
 }

@@ -2,56 +2,35 @@
 
 namespace Stencil\App;
 
+use Stencil\Core\Element;
 
-final class Elements {
+final class Elements extends \Stencil_Loader {
 
-	protected $namespace = '\\Stencil\\App\\Elements';
-    protected $elements = array(
-        'standard',
-        'single-standard',
-        'wp-title'
+    protected $includes = array(
+        'app/elements/standard',
+        'app/elements/single-standard',
+        'app/elements/wp-title'
     );
 
-   
 
-
-    public function includes() {
-        foreach ( $this->elements as $element ) {
-            $this->require_file( STL_PATH . "app/elements/$element.php" );
-        }
-    }
-
-    public function run() {
-        foreach ( $this->elements as $element ) {
-            $class = str_replace("-", "_",$element);
-            $class = ucwords(str_replace("_", " ",$class));
-            $class = str_replace( " ", "_", $class );
-            $class = $this->namespace.'\\'.$class;
+    public function init() {
+        $element = Element::instance();
+        foreach ( $this->includes as $include ) {
+            $class = $this->className($include);
+            $class = '\\Stencil\\App\\Elements\\'.$class;
             if(class_exists( $class )) {
-                add_filter('stencil/element_model', function ($collections) use ($element, $class) {
-                    $collections[$element] = new $class;
-                  return $collections;
-              }, 10, 2);
+                $element->add($class);
             };
         }
     }
 
-
-    protected function require_file( $file ) {
-        if ( file_exists( $file ) ) {
-            require_once $file;
-            return true;
-        }
-        return false;
-    }
-
-
     private static $instance;
+
     public static function instance() {
         if ( is_null( self::$instance ) ) {
             self::$instance = new self();
             self::$instance->includes();
-            self::$instance->run();
+            self::$instance->init();
         }
         return self::$instance;
     }
@@ -62,5 +41,4 @@ final class Elements {
     public function __wakeup() {
         _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?', 'stencil'), '1.6');
     }
- 
 }

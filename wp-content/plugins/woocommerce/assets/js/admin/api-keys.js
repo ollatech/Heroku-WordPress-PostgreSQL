@@ -1,4 +1,4 @@
-/*global jQuery, Backbone, _, woocommerce_admin_api_keys */
+/*global jQuery, Backbone, _, woocommerce_admin_api_keys, wcSetClipboard, wcClearClipboard */
 (function( $ ) {
 
 	var APIView = Backbone.View.extend({
@@ -48,20 +48,33 @@
 		/**
 		 * Init TipTip
 		 */
-		initTipTip: function() {
-			$( '.copy-key', this.el ).tipTip({
-				'attribute':  'data-tip',
-				'activation': 'click',
-				'fadeIn':     50,
-				'fadeOut':    50,
-				'delay':      0
-			});
-
-			$( document.body ).on( 'copy', '.copy-key', function( e ) {
-				e.clipboardData.clearData();
-				e.clipboardData.setData( 'text/plain', $.trim( $( this ).prev( 'code' ).html() ) );
-				e.preventDefault();
-			});
+		initTipTip: function( css_class ) {
+			$( document.body )
+				.on( 'click', css_class, function( evt ) {
+					evt.preventDefault();
+					if ( ! document.queryCommandSupported( 'copy' ) ) {
+						$( css_class ).parent().find( 'input' ).focus().select();
+						$( '#copy-error' ).text( woocommerce_admin_api_keys.clipboard_failed );
+					} else {
+						$( '#copy-error' ).text( '' );
+						wcClearClipboard();
+						wcSetClipboard( $.trim( $( this ).prev( 'input' ).val() ), $( css_class ) );
+					}
+				} )
+				.on( 'aftercopy', css_class, function() {
+					$( '#copy-error' ).text( '' );
+					$( css_class ).tipTip( {
+						'attribute':  'data-tip',
+						'activation': 'focus',
+						'fadeIn':     50,
+						'fadeOut':    50,
+						'delay':      0
+					} ).focus();
+				} )
+				.on( 'aftercopyerror', css_class, function() {
+					$( css_class ).parent().find( 'input' ).focus().select();
+					$( '#copy-error' ).text( woocommerce_admin_api_keys.clipboard_failed );
+				} );
 		},
 
 		/**
@@ -121,7 +134,8 @@
 								consumer_secret: data.consumer_secret
 							}) );
 							self.createQRCode( data.consumer_key, data.consumer_secret );
-							self.initTipTip();
+							self.initTipTip( '.copy-key' );
+							self.initTipTip( '.copy-secret' );
 						} else {
 							$( '#key_description', self.el ).val( data.description );
 							$( '#key_user', self.el ).val( data.user_id );

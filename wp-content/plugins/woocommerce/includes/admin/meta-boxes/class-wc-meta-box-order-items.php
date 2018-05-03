@@ -15,12 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_Meta_Box_Order_Items Class
+ * WC_Meta_Box_Order_Items Class.
  */
 class WC_Meta_Box_Order_Items {
 
 	/**
-	 * Output the metabox
+	 * Output the metabox.
+	 *
+	 * @param WP_Post $post
 	 */
 	public static function output( $post ) {
 		global $post, $thepostid, $theorder;
@@ -40,9 +42,15 @@ class WC_Meta_Box_Order_Items {
 	}
 
 	/**
-	 * Save meta box data
+	 * Save meta box data.
+	 *
+	 * @param int $post_id
 	 */
-	public static function save( $post_id, $post ) {
+	public static function save( $post_id ) {
+		/**
+		 * This $_POST variable's data has been validated and escaped
+		 * inside `wc_save_order_items()` function.
+		 */
 		wc_save_order_items( $post_id, $_POST );
 	}
 }

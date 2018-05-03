@@ -4,13 +4,34 @@ define( 'STL_THEME_VER', '1.0.0' );
 define( 'STL_THEME', get_template_directory() .'/' );
 define( 'STL_THEME_ASSET', get_template_directory_uri().'/assets/' );
 
-class STL_Theme	{
+function stencil_dev() {
+	if(get_option('site_mode') === 'prod') {
+		return false;
+	}
+	return true;
+}
+
+add_filter( 'body_class', 'stl_body_class' );
+function stl_body_class( $classes ) {
+	$classes[] = 'ux';
+	if ( is_page_template( 'page-example.php' ) ) {
+		$classes[] = 'example';
+	}
+	return $classes;
+}
+
+
+class Stencil_Theme	{
 
 	protected $includes = [
-		'config/register',
-		'core/layout',
-		'includes/nav-walker'
+		'layouts/loader',
+		'woocommerce/functions'
 	];
+
+	public function loader() {
+		Stencil_Layout_Loader::instance();
+	}
+
 
 
 	public function init() {
@@ -18,7 +39,6 @@ class STL_Theme	{
 		add_action('wp_enqueue_scripts', array($this, 'assets'));
 		register_activation_hook( __FILE__, array($this, 'activate') );
 		register_deactivation_hook(__FILE__, array($this, 'deactivate') );
-	
 	} 
 
 
@@ -61,6 +81,7 @@ class STL_Theme	{
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
 			self::$instance->includes();
+			self::$instance->loader();
 			self::$instance->init();
 		}
 		return self::$instance;
@@ -73,4 +94,4 @@ class STL_Theme	{
 		_doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?', 'stencil'), '1.6');
 	}
 }
-$STL = STL_Theme::instance();
+$STL = Stencil_Theme::instance();

@@ -5,12 +5,21 @@ namespace Stencil\Core\Base;
 
 class Post_Base {
 
+	protected $element = false;
+	protected $extend = false;
 	protected $capability;
 	protected $name;
 	protected $title;
 	protected $description;
 	protected $icon;
 
+	public function is_element() {
+		return $this->element;
+	}
+
+	public function is_extend() {
+		return $this->extend;
+	}
 	public function capability() {
 		return $this->capability;
 	}
@@ -31,10 +40,16 @@ class Post_Base {
 	}
 
 	public function args() {
-		return [
-				'label'                 => __( $this->title , 'stencil' ),
-				'description'           => __( $this->description, 'stencil' ),
-		];
+		$args = [];
+		$args['label'] = __( $this->title , 'stencil' );
+		$args['description'] = __( $this->description , 'stencil' );
+		$args['labels'] = [];
+		$args['labels']['menu_name'] = __( $this->title , 'stencil' );
+		if($this->element) {
+			$args['show_in_menu'] ='stencil-elements';
+		}
+		
+		return $args;
 	}
 
 	public function taxonomies() {

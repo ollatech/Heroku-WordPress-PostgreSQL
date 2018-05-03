@@ -15,7 +15,6 @@ class Wp_Title extends Element_Model{
 	}
 
 	public function render_html($values = []) {
-		print_r(the_title());
 		$output = '';
 		ob_start();
 		echo the_content();

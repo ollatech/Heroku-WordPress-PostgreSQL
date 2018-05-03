@@ -4,44 +4,75 @@ namespace Stencil\Core;
 
 use Stencil\Core\Base\Field_Base;
 
-final class Field {
+final class Field extends \RWMB_Field {
 
-    protected $base_fields = [
-        'text',
-        'checkbox'
-    ];
 
-    protected $fields = [];
+    public static function save_option($field) {
 
-    public function add_field($name, $class) {
-        if($class instanceof Field_Base) {
-            $this->fields[$name] = $class;
-        } 
+        
     }
-    public function render($controls) {
-        $output = '';
-        foreach ($controls as $control) {
-            $output .= $this->render_field($control);
+
+
+    public static function option($field) {
+        self::call( $field, 'admin_enqueue_scripts' );
+
+        if(isset($_POST[$field['id']])) {
+            update_option( $field['id'], $_POST[$field['id']] );
         }
-        return $output;
-    }
+        $field = array_merge($field, [
+            'value' => 1
+        ]);
+        $field = self::call( $field, 'normalize');
 
-    public function render_field($control) {
-        if(!isset($control['type'])) {
-            return;
+        if(isset($field['mime_type'])) {
+
+          print_r($field);
         }
-        if(isset($this->fields[$control['type']])) {
-            return $this->fields[$control['type']]->render($control);
-        } 
+        return self::show($field, 'false');
     }
 
-    public function register() {
-        add_action( 'after_setup_theme', function() {
-            $fields  = apply_filters('stencil/field', []);
-            foreach ($fields as $field => $instance) {
-                $this->add_field($field, $instance);
-            }
-        });
+
+    public static function show( $field, $saved, $post_id = 0 ) {
+
+
+        $meta = get_option($field['id']);
+        
+        $meta = self::filter( 'field_meta', $meta, $field, $saved );
+
+        $begin = self::call( $field, 'begin_html', $meta );
+        $begin = self::filter( 'begin_html', $begin, $field, $meta );
+
+        // Separate code for cloneable and non-cloneable fields to make easy to maintain.
+        if ( $field['clone'] ) {
+            $field_html = RWMB_Clone::html( $meta, $field );
+        } else {
+            // Call separated methods for displaying each type of field.
+            $field_html = self::call( $field, 'html', $meta );
+            $field_html = self::filter( 'html', $field_html, $field, $meta );
+        }
+
+        $end = self::call( $field, 'end_html', $meta );
+        $end = self::filter( 'end_html', $end, $field, $meta );
+
+        $html = self::filter( 'wrapper_html', "$begin$field_html$end", $field, $meta );
+
+        // Display label and input in DIV and allow user-defined classes to be appended.
+        $classes = "rwmb-field rwmb-{$field['type']}-wrapper " . $field['class'];
+        if ( 'hidden' === $field['type'] ) {
+            $classes .= ' hidden';
+        }
+        if ( ! empty( $field['required'] ) ) {
+            $classes .= ' required';
+        }
+
+        $outer_html = sprintf(
+            $field['before'] . '<div class="%s">%s</div>' . $field['after'],
+            trim( $classes ),
+            $html
+        );
+        $outer_html = self::filter( 'outer_html', $outer_html, $field, $meta );
+
+        echo $outer_html;
     }
 
 
@@ -50,9 +81,6 @@ final class Field {
     public static function instance() {
         if ( is_null( self::$instance ) ) {
             self::$instance = new self();
-            self::$instance->run();
-            self::$instance->includes();
-            self::$instance->register();
         }
         return self::$instance;
     }
@@ -64,38 +92,5 @@ final class Field {
     public function __wakeup() {
         _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?', 'stencil'), '1.6');
     }
-    public function run() {
-        $this->includes();
-    }
-
-    public static function html($type, $field, $field_value) {
-        $class = str_replace("-", "_",$type);
-        $class = ucwords(str_replace("_", " ",$class));
-        $class = str_replace( " ", "_", $class );
-        $class = self::$namespace.'\\'.$class;
-        if (class_exists($class, false)) {
-            return $class::html($type, $field, $field_value);
-        }
-    }
-
-    public function includes() {
-        foreach ( $this->base_fields as $field ) {
-            $this->require_file( STL_PATH . "core/fields/$field.php" );
-            $class = str_replace("-", "_",$field);
-            $class = ucwords(str_replace("_", " ",$class));
-            $class = str_replace( " ", "_", $class );
-            $class = '\\Stencil\\Core\\Fields\\'.$class;
-            if (class_exists($class, false)) {
-                $this->add_field($field, new $class);
-            }
-        }
-    }
-
-    protected function require_file( $file ) {
-        if ( file_exists( $file ) ) {
-            require_once $file;
-            return true;
-        }
-        return false;
-    }
+   
 }

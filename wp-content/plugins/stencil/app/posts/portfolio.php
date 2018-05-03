@@ -8,6 +8,7 @@ if (!defined('ABSPATH'))
 use Stencil\Core\Base\Post_Base;
 
 class Portfolio extends Post_Base {
+	protected $element = true;
 	protected $capability = 'post';
 	protected $name = 'portfolio';
 	protected $title = 'Portfolio';

@@ -17,14 +17,19 @@ class Common extends Option_Base{
 	public function controls() {
 		return [
 			[
-				'id' => 'date',
-				'type' => 'text',
-				'name' => __( 'Release Date', 'stencil' )
+				'type' => 'file_input',
+				'name' => 'Logo',
+				'id'   => 'site_logo'
 			],
 			[
-				'id' => 'date2',
-				'type' => 'checkbox',
-				'name' => __( 'Release Date', 'stencil' )
+				'name'    => 'WYSIWYG / Rich Text Editor',
+				'id'      => 'site_about',
+				'type'    => 'wysiwyg',
+				'raw'     => false,
+				'options' => [
+					'textarea_rows' => 4,
+					'teeny'         => true,
+				]
 			]
 		];
 	}

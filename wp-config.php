@@ -1,46 +1,31 @@
 <?php
 /**
- * The base configuration for WordPress
+ * The base configurations of the WordPress.
  *
- * The wp-config.php creation script uses this file during the
- * installation. You don't have to use the web site, you can
- * copy this file to "wp-config.php" and fill in the values.
+ * This file has the following configurations: MySQL settings, Table Prefix,
+ * Secret Keys, and ABSPATH. You can find more information by visiting
+ * {@link http://codex.wordpress.org/Editing_wp-config.php Editing wp-config.php}
+ * Codex page. You can get the MySQL settings from your web host.
  *
- * This file contains the following configurations:
- *
- * * MySQL settings
- * * Secret keys
- * * Database table prefix
- * * ABSPATH
- *
- * @link https://codex.wordpress.org/Editing_wp-config.php
+ * This file is used by the wp-config.php creation script during the
+ * installation. You don't have to use the web site, you can just copy this file
+ * to "wp-config.php" and fill in the values.
  *
  * @package WordPress
  */
 
-// Sendgrid settings - Read in the sendgrid auth from the config //
-define('SENDGRID_USERNAME', $_ENV["SENDGRID_USERNAME"]);
-define('SENDGRID_PASSWORD', $_ENV["SENDGRID_PASSWORD"]); 
-  
-// S3 Config Info - read the S3 Access Keys from the config //
-define( 'AWS_ACCESS_KEY_ID', $_ENV["AWS_ACCESS_KEY_ID"]);
-define( 'AWS_SECRET_ACCESS_KEY', $_ENV["AWS_SECRET_ACCESS_KEY"]);  
-
-// ** Heroku Postgres settings - from Heroku Environment ** //
-$db = parse_url($_ENV["DATABASE_URL"]);
-
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', trim($db["path"],"/"));
+define('DB_NAME', 'stencil');
 
 /** MySQL database username */
-define('DB_USER', $db["user"]);
+define('DB_USER', 'root');
 
 /** MySQL database password */
-define('DB_PASSWORD', $db["pass"]);
+define('DB_PASSWORD', 'root');
 
 /** MySQL hostname */
-define('DB_HOST', $db["host"]);
+define('DB_HOST', 'localhost');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -57,14 +42,14 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         $_ENV["AUTH_KEY"]);
-define('SECURE_AUTH_KEY',  $_ENV["SECURE_AUTH_KEY"]);
-define('LOGGED_IN_KEY',    $_ENV["LOGGED_IN_KEY"]);
-define('NONCE_KEY',        $_ENV["NONCE_KEY"]);
-define('AUTH_SALT',        $_ENV["AUTH_SALT"]);
-define('SECURE_AUTH_SALT', $_ENV["SECURE_AUTH_SALT"]);
-define('LOGGED_IN_SALT',   $_ENV["LOGGED_IN_SALT"]);
-define('NONCE_SALT',       $_ENV["NONCE_SALT"]);
+define('AUTH_KEY',         'w5^[ AeGew^pRe&];+zstP+5ZC|mTdfnXQ ZHTuCoX*gH!Cn@grxqM6z0FmuZ!4^');
+define('SECURE_AUTH_KEY',  'dZ,JEjnbT /-p)1PUc<<-Sm)pPZBnAw_H}Ng-rO&t%]bU:k=4xJEUS+fPfN|9KJT');
+define('LOGGED_IN_KEY',    ' PTEv@QIH}V4k|RAb8k.mzcGr)82SNw*,2[^hkKpYq@b$K[u2%KHdR_.cW_H-z!l');
+define('NONCE_KEY',        'N-5t@$d}liZ,v_%Vo>SDw^GH#i|IxN]0jH4Pr2LpYj- MR&6v$~$,xcp_7][GX#G');
+define('AUTH_SALT',        'B`J+/d0QxS8Y15N8^1a0S2(`n)mw|GvS+eC-xhQ+$dM%,zX`:PVyM/e.A{MOgw`1');
+define('SECURE_AUTH_SALT', ':k+=x+3([sobm,|+Gu(+3A=J+YC:2V$`+lGaI0%}*M&z+M)J;J%SreIYbuHmzE&=');
+define('LOGGED_IN_SALT',   '/,<<8u[Sqa`>+om^lG^S2>$Popb`!>]:7Cq?0BX.Gf+Ciek]FB#13oroq~BL58*q');
+define('NONCE_SALT',       'U`6(Cse}(b0_6y+4EWxs/DvJHk$o6;& x;T)>DE@yB6l77O7w:urD1c-vRZ<<G4K');
 
 /**#@-*/
 
@@ -77,24 +62,15 @@ define('NONCE_SALT',       $_ENV["NONCE_SALT"]);
 $table_prefix  = 'wp_';
 
 /**
- * WordPress Localized Language, defaults to English.
- *
- * Change this to localize WordPress. A corresponding MO file for the chosen
- * language must be installed to wp-content/languages. For example, install
- * de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German
- * language support.
- */
-define('WPLANG', 'en');
-
-/**
  * For developers: WordPress debugging mode.
  *
  * Change this to true to enable the display of notices during development.
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
  * in their development environments.
- */ 
+ */
 define('WP_DEBUG', true);
-define( 'WP_AUTO_UPDATE_CORE', false );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY',true );
 
 /* That's all, stop editing! Happy blogging. */
 

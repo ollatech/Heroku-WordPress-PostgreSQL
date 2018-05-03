@@ -54,7 +54,6 @@ final class Stencil {
 
 
 	private function core() {
-		\Stencil\Core\Admin::instance();
 		\Stencil\Core\Option::instance();
 		\Stencil\Core\Option_Admin::instance();
 		\Stencil\Core\Element::instance();
@@ -62,6 +61,11 @@ final class Stencil {
 		\Stencil\Core\Posttype::instance();
 		\Stencil\Core\Field::instance();
 		\Stencil\Core\Template::instance();
+		\Stencil\Core\Template_Helper::instance();
+		\Stencil\Core\Layout::instance();
+		\Stencil\Core\Widget::instance();
+		\Stencil\Core\Render::instance();
+		\Stencil\Core\Css::instance();
 	}
 
 	private function app() {
@@ -69,6 +73,9 @@ final class Stencil {
         \Stencil\App\Posts::instance();
         \Stencil\App\Options::instance();
         \Stencil\App\Option_Groups::instance();
+        \Stencil\App\Widgets::instance();
+        \Stencil\App\Templates::instance();
+        \Stencil\App\Helpers::instance();
 	}
 
 	private function modules() {

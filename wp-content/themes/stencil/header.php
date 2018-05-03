@@ -26,13 +26,11 @@
 	<?php do_action('stencil_before_body'); ?>
 	<body <?php body_class(); ?>>
 		<?php do_action('stencil_start_body'); ?>
-		<?php do_action('stencil_before_leftside'); ?>
-		<?php get_template_part( 'layouts/leftside'); ?>
-		<?php do_action('stencil_after_leftside'); ?>
 		<main class="ux-main">
-			<?php do_action('stencil_before_header'); ?>
-			<?php get_template_part( 'layouts/header'); ?>
-			<?php do_action('stencil_after_header'); ?>
-			
+			<?php
+			echo Stencil_Render()->header();
+			?>
+
+
 
 

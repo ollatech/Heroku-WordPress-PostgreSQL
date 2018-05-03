@@ -6,24 +6,28 @@ namespace Stencil\Core;
 if (!defined('ABSPATH'))
     exit;
 
-final class Loader {
+final class Loader extends \Stencil_Loader {
 
-    protected $namespace = 'Stencil\\Core';
     protected $apps = array(
-        'base/option-group-base',
-        'base/option-base',
-        'base/field-base',
-        'base/post-base',
-        'factory/option-page',
-        'factory/option',
-        'factory/post',
-        'posttype',
-        'field',
-        'element',
-        'element-admin',
-        'option',
-        'option-admin',
-        'template'
+        'core/base/option-group-base',
+        'core/base/option-base',
+        'core/base/field-base',
+        'core/base/post-base',
+        'core/posttype',
+        'core/field',
+        'core/element',
+        'core/element-admin',
+        'core/option',
+        'core/option-admin',
+        'core/template',
+        'core/template-finder',
+        'core/template-helper',
+        'core/layout',
+        'core/data',
+        'core/render',
+        'core/css',
+        'core/widget',
+        'core/view'
     );
     
     private static $instance;
@@ -32,6 +36,7 @@ final class Loader {
         if ( is_null( self::$instance ) ) {
             self::$instance = new self();
             self::$instance->includes();
+            self::$instance->init();
         }
         return self::$instance;
     }
@@ -42,19 +47,5 @@ final class Loader {
     public function __wakeup() {
         _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?', 'stencil'), '1.6');
     }
-
-
-    protected function includes() {
-        foreach ( $this->apps as $app ) {
-            $this->require_file( STL_PATH . "core/$app.php" );
-        }
-    }
-
-    protected function require_file( $file ) {
-        if ( file_exists( $file ) ) {
-            require_once $file;
-            return true;
-        }
-        return false;
-    }
+   
 }

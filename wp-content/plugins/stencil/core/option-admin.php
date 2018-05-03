@@ -7,8 +7,11 @@ if ( !defined( 'ABSPATH' ) ) exit;
 class Option_Admin {
 
 	public function admin() {
+		add_action('admin_enqueue_scripts', array($this, 'enqueue'));
 		add_action( 'admin_menu', array($this, 'menu'), 16);
 	}
+
+
 
 	public function menu() {
 		add_menu_page( 'Controls', 'Controls', 'manage_options', 'stencil-general', array($this, 'view'), 'dashicons-admin-generic' );
@@ -25,6 +28,20 @@ class Option_Admin {
 				0
 			);
 		}
+	}
+
+	public function enqueue() {
+		
+
+		wp_enqueue_style( 'rwmb', RWMB_CSS_URL . 'style.css', array(), RWMB_VER );
+		if ( is_rtl() ) {
+			wp_enqueue_style( 'rwmb-rtl', RWMB_CSS_URL . 'style-rtl.css', array(), RWMB_VER );
+		}
+
+			wp_enqueue_script( 'rwmb', RWMB_JS_URL . 'script.js', array( 'jquery' ), RWMB_VER, true );
+		
+
+
 	}
 	public function view() {}
 

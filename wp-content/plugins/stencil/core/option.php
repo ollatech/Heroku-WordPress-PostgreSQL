@@ -5,9 +5,9 @@ namespace Stencil\Core;
 if ( !defined( 'ABSPATH' ) ) exit;
 
 
-class Option {
+class Option   {
 
-
+	
 	protected $options;
 
 	public function get_options() {
@@ -34,12 +34,10 @@ class Option {
 	}
 
 	private function compose_options() {
-
 		add_action( 'after_setup_theme', function() {
 			$options = $this->init_options();
 			$groups = $this->init_option_groups();
 			$result = [];
-
 			foreach ($groups as $name => $class) {
 				if(isset($options[$name]) && is_array($options[$name])) {
 					foreach ($options[$name] as $optname => $optclass) {
@@ -48,14 +46,22 @@ class Option {
 				}
 				$result[$name] = $class;
 			}
-
 			$this->options = $result;
 		});
+	}
 
-		
+	public function add($class) {
+		add_filter('stencil/option', function ($collections) use ($class) {
+			$collections[] = new $class;
+			return $collections;
+		}, 10, 2);
+	}
 
-
-
+	public function add_group($class) {
+		  add_filter('stencil/option_group', function ($collections) use ($class) {
+                    $collections[] = new $class;
+                  return $collections;
+              }, 10, 2);
 	}
 
 	

@@ -22,8 +22,8 @@ class STL_Theme_Global	{
 	}
 
 	public function assets() {
-		wp_enqueue_script( 'stl_global', STL_GBL_ASSET.'js/app.js',  array('stl_core'), STL_GBL_VERSION, true);
-		wp_enqueue_style( 'stl_global', STL_GBL_ASSET.'css/app.css',  array('stl_core'), STL_GBL_VERSION, false);
+		wp_enqueue_script( 'stl_global', STL_GBL_ASSET.'js/app.js',  array('stencil'), STL_GBL_VERSION, true);
+		wp_enqueue_style( 'stl_global', STL_GBL_ASSET.'css/app.css',  array('stencil'), STL_GBL_VERSION, false);
 	}
 
 	public function activate() {

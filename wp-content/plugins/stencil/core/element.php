@@ -20,6 +20,13 @@ class Element {
 		'single-layout',
 		'wordpress'
 	);
+
+	public function add($class) {
+		add_filter('stencil/element_model', function ($collections) use ($class) {
+			$collections[] = new $class;
+			return $collections;
+		}, 10, 2);
+	}
 	
 	public function get_elements() {
 		return $this->html->get_elements();

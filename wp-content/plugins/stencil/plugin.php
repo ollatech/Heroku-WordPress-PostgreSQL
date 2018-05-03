@@ -15,12 +15,12 @@
 if (!defined('ABSPATH'))
 	exit;
 
-define( 'STL_VERSION', '1.0.0' );
-define( 'STL_PATH', plugin_dir_path( __FILE__ ) );
-define( 'STL_ELEMENTOR_PATH', plugin_dir_path( __FILE__ ).'elementor/' );
-define( 'STL_URL', plugin_dir_url( __FILE__ ) );
-define( 'STL_ASSET_URL', plugin_dir_url( __FILE__ ).'assets/' );
+require_once plugin_dir_path( __FILE__ )  . 'classes/loader.php';
+require_once plugin_dir_path( __FILE__ )  . 'classes/widget-base.php';
+require_once plugin_dir_path( __FILE__ )  . 'classes/template-base.php';
 
 
+require_once plugin_dir_path( __FILE__ )  . 'stencil.php';
+require_once plugin_dir_path( __FILE__ )  . 'mirror.php';
+require_once plugin_dir_path( __FILE__ )  . 'register.php';
 
-require_once STL_PATH . 'stencil.php';

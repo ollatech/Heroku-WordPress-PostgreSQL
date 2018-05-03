@@ -49,6 +49,7 @@ class RW_Meta_Box {
 	 * @param array $meta_box Meta box definition.
 	 */
 	public function __construct( $meta_box ) {
+
 		$meta_box = self::normalize( $meta_box );
 		$this->meta_box = $meta_box;
 
@@ -135,9 +136,7 @@ class RW_Meta_Box {
 	 * Enqueue common scripts and styles.
 	 */
 	public function enqueue() {
-		if ( is_admin() && ! $this->is_edit_screen() ) {
-			return;
-		}
+		
 
 		wp_enqueue_style( 'rwmb', RWMB_CSS_URL . 'style.css', array(), RWMB_VER );
 		if ( is_rtl() ) {
@@ -230,7 +229,7 @@ class RW_Meta_Box {
 		// 2nd action applies to only current meta box.
 		do_action( 'rwmb_before', $this );
 		do_action( "rwmb_before_{$this->id}", $this );
-
+		
 		foreach ( $this->fields as $field ) {
 			RWMB_Field::call( 'show', $field, $saved, $this->object_id );
 		}
